@@ -1,4 +1,5 @@
 //axios import buraya gelecek
+import axios from 'axios'
 
 var benimIP;
 
@@ -22,6 +23,27 @@ async function ipAdresimiAl(){
 // ------------ değiştirmeyin --------------
 
 
+/*let data = {
+	"sorgu":"46.1.113.164",
+	"durum":"OK",
+	"kıta":"Asia",
+	"ülke":"Turkey",
+	"ülkeKodu":"TR",
+	"ülkebayrağı":"https:\/\/apis.ergineer.com\/ulkebayraklari\/TR",
+	"bölge":"34",
+	"bölgeAdı":"Istanbul",
+	"şehir":"Istanbul",
+	"zip":"34375",
+	"enlem":41.047899999999998499333742074668407440185546875,
+	"boylam":28.9772999999999996134647517465054988861083984375,
+	"saatdilimi":"Europe\/Istanbul",
+	"parabirimi":"TRY",
+	"isp":"Millenicom Telekomunikasyon Hizmetleri Anonim Sirketi",
+	"organizasyon":"Millenicom Dslnet2",
+	"as":"AS34296 Millenicom Telekomunikasyon Hizmetleri Anonim Sirketi"
+  }*/
+  
+
 /*
 	ADIM 1: axios kullanarak, aşağıdaki URL'ye GET sorgusu atacağız
     (tag içindeki yere kendi ipnizi yazarak URL'yi oluşturun):
@@ -31,11 +53,17 @@ async function ipAdresimiAl(){
 	ADIM 5'e gelene kadar fonksiyonunuzu test etmek için ip nizi URL'ye manuel olarak ekleyebilirsiniz.
 */
 
+
 /*
 	ADIM 2: Geri döndürülen verileri inceleyin, bu sizin ip bilgileriniz! Bileşen fonksiyonunuzu geliştirmek içindeki bu veri yapısını
 	iyice anlamanız gerekmektedir.
 	
 */
+
+ 
+	
+
+
 /*
 	ADIM 3: Argümanı sadece 1 nesne kabül eden bir fonksiyon oluşturun.
     DOM metotlarını ve özelliklerini kullanarak, şunları gerçekleştirin:
@@ -54,6 +82,50 @@ async function ipAdresimiAl(){
     </div>
 */
 
+const kartOlustur= (data) => {
+	const containerDiv = document.createElement("div");
+	containerDiv.classList.add("card");
+	
+	
+	const image=document.createElement("img");
+	image.src = "https://flagcdn.com" + "/256x192/"+data.ülkeKodu.toLowerCase() + ".png";
+	
+	const containerDiv2 = document.createElement("div");
+	containerDiv2.classList.add("card-info");
+	
+	const h3 = document.createElement("h3");
+	h3.classList.add("ip");
+	h3.textContent=data.sorgu;
+	
+	const p = document.createElement("p");
+	p.classList.add("ulke");
+	p.textContent = `${data.ulke} (${data.ülkeKodu})`;
+	
+	const p2 = document.createElement("p");
+	p2.textContent = ` Enlem: ${data.enlem}  Boylam: ${data.boylam}`;
+	
+	const p3 = document.createElement("p");
+	p3.textContent = ` Şehir: ${data.şehir} `;
+	
+	const p4 = document.createElement("p");
+	p4.textContent = `Saat Dilimi: ${data.saatdilimi} `;
+	
+	const p5 = document.createElement("p");
+	p5.textContent = ` Para Birimi: ${data.parabirimi} `;
+	
+	const p6 = document.createElement("p");
+	p6.textContent = ` ISP: ${data.isp}  `;
+	
+	containerDiv2.append(h3,p,p2,p3,p4,p5,p6);
+	containerDiv.append(image,containerDiv2);
+	
+	return containerDiv;
+	
+}
+
+
+
+
 /*
 	ADIM 4: API'den alınan verileri kullanarak ADIM 3'te verilen yapıda bir kart oluşturun ve 
 	bu kartı DOM olarak .cards elementinin içine ekleyin. 
@@ -67,6 +139,11 @@ async function ipAdresimiAl(){
 	Örnek dinamik URL kullanımı: var url = "https://apis.ergineer.com/ipgeoapi/"+benimIP; 
 */
 
+async function getData(){
+	await ipAdresimiAl();
+	axios.get("https://apis.ergineer.com/ipgeoapi/"+benimIP).then((response)=>{
+	document.querySelector(".cards").append(kartOlustur(response.data))
+	});
 
-
-//kodlar buraya gelecek
+}
+getData();
